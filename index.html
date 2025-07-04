@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title>Android Emulator</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+     <body>
+      <div class="phone">
+            <div class="screen">
+                <div class="status-bar">
+                    <span id="time">12:00</span>
+                    <div class="status-icons">
+                   <span class="material-icons">bluetooth</span>
+                    <span class="material-icons">wifi</span>
+                        <span class="material-icons">signal_cellular_alt</span>
+                        <span class="material-icons">battery_full</span>
+                    </div>
+                </div>
+                <div class="main-content">
+                    <div id="home-screen" class="app-screen active">
+                        <div class="widget-container">
+                            <div class="clock-widget">
+                                <div id="widget-time">12:00</div>
+                                <div id="widget-date">Sunday, Jan 1</div>
+                            </div>
+                            <div class="weather-widget">
+                                <span class="material-icons">cloudy</span>
+                                <div class="weather-info">
+                                    <p>18°C</p>
+                                    <span>Mostly Cloudy</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="app-grid">
+                            <div class="app-icon" data-app="settings-app" data-app-name="Settings">
+                                <div class="icon-3d settings-icon"><span class="material-icons">settings</span></div>
+                                <span>Settings</span>
+                            </div>
+                            <div class="app-icon" data-app="calculator-app" data-app-name="Calculator">
+                                <div class="icon-3d calc-icon">+−×÷</div>
+                                <span>Calculator</span>
+                            </div>
+                            <div class="app-icon" data-app="notes-app" data-app-name="Notes">
+                                <div class="icon-3d notes-icon"><span class="material-icons">description</span></div>
+                                <span>Notes</span>
+                            </div>
+                            <div class="app-icon" data-app="browser-app" data-app-name="Browser">
+                                <div class="icon-3d browser-icon"><span class="material-icons">public</span></div>
+                                <span>Browser</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="recents-screen" class="app-screen">
+                        <div id="recents-container"></div>
+                        <button id="clear-recents-btn">Clear All</button>
+                    </div>
+                    <div id="settings-app" class="app-screen app-container">
+                        <div class="app-header">Settings</div>
+                        <div class="settings-content">
+                            <div class="settings-section">
+                                <div class="settings-item">
+                                    <div>
+                                        <h4>Dark Mode</h4>
+                                        <p>Enable dark theme across the UI</p>
+                                    </div>
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="dark-mode-toggle">
+                                        <label for="dark-mode-toggle"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="settings-section">
+                                <h4>Wallpaper</h4>
+                                <div class="wallpaper-picker">
+                                    <div class="wallpaper-option active" data-wallpaper="url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1887')"></div>
+                                    <div class="wallpaper-option" data-wallpaper="url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1887')"></div>
+                                    <div class="wallpaper-option" data-wallpaper="url('https://images.unsplash.com/photo-1555963968-d069a5d38641?q=80&w=1887')"></div>
+                                    <div class="wallpaper-option" data-wallpaper="url('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=2070')"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="calculator-app" class="app-screen app-container">
+                        <div class="app-header calc-header">
+                            <span>Calculator</span>
+                            <div class="toggle-switch small-toggle">
+                                <input type="checkbox" id="calc-dark-mode-toggle">
+                                <label for="calc-dark-mode-toggle"></label>
+                            </div>
+                        </div>
+                        <div class="calculator-body">
+                            <div class="calc-display">0</div>
+                            <div class="calc-buttons"></div>
+                        </div>
+                    </div>
+                    <div id="notes-app" class="app-screen app-container">
+                        <div class="notes-view">
+                            <div class="app-header">Notes</div>
+                            <div id="notes-list"></div>
+                            <button id="add-note-btn" class="fab"><span class="material-icons">add</span></button>
+                        </div>
+                        <div class="note-editor">
+                            <div class="app-header note-editor-header">
+                                <button id="back-to-list-btn">Back</button>
+                                <button id="delete-note-btn">Save</button>
+                            </div>
+                            <input type="text" id="note-title-input" placeholder="Note Title">
+                            <textarea id="note-content-input" placeholder="Start writing..."></textarea>
+                        </div>
+                    </div>
+                    <div id="browser-app" class="app-screen app-container">
+                        <div class="app-header">Browser</div>
+                        <div class="browser-placeholder">
+                            <span class="material-icons">wifi_off</span>
+                            <h4>Browser Unavailable</h4>
+                            <p>Please connect to the internet!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-bar">
+                    <button id="back-btn"><span class="material-icons">arrow_back_ios</span></button>
+                    <button id="home-btn"><span class="material-icons">radio_button_unchecked</span></button>
+                    <button id="recents-btn"><span class="material-icons">crop_square</span></button>
+                </div>
+            </div>
+        </div>
+      <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    // --- GLOBAL ELEMENTS & STATE ---
+    let activeApp = 'home-screen';
+    let appStack = ['home-screen']; // For back navigation
+    let openApps = new Set(); // For recents menu
+
+    // --- TIME & DATE MODULE ---
+    // Updates the status bar clock and home screen widgets
+    function updateClock() {
+        const timeElement = document.getElementById('time');
+        const widgetTime = document.getElementById('widget-time');
+        const widgetDate = document.getElementById('widget-date');
+
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        
+        timeElement.textContent = timeString;
+        widgetTime.textContent = timeString;
+        widgetDate.textContent = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+    updateClock();
+    setInterval(updateClock, 30000); // Update every 30 seconds to save resources
+
+    // --- CORE NAVIGATION MODULE ---
+    // Manages switching between app screens
+    const navigation = (() => {
+        const showScreen = (screenId, isOpeningNew) => {
+            if (activeApp === screenId && screenId !== 'recents-screen') return;
+
+            document.getElementById(activeApp)?.classList.remove('active');
+            document.getElementById(screenId).classList.add('active');
+            activeApp = screenId;
+
+            if (isOpeningNew) {
+                if (appStack[appStack.length - 1] !== screenId) {
+                    appStack.push(screenId);
+                }
+                if (screenId !== 'home-screen' && screenId !== 'recents-screen') {
+                    openApps.add(screenId);
+                }
+            }
+        };
+        
+        document.querySelectorAll('.app-icon').forEach(icon => {
+            icon.addEventListener('click', () => showScreen(icon.dataset.app, true));
+        });
+        
+        document.getElementById('home-btn').addEventListener('click', () => {
+            showScreen('home-screen', false);
+            appStack = ['home-screen'];
+        });
+
+        document.getElementById('back-btn').addEventListener('click', () => {
+            if (activeApp === 'notes-app' && document.querySelector('.note-editor').classList.contains('active')) {
+                 notesApp.closeEditor();
+                 return;
+            }
+            if (appStack.length > 1) {
+                appStack.pop();
+                showScreen(appStack[appStack.length - 1], false);
+            }
+        });
+
+        document.getElementById('recents-btn').addEventListener('click', () => {
+             if (activeApp === 'recents-screen') {
+                 document.getElementById('back-btn').click();
+                 return;
+             }
+             renderRecents();
+             showScreen('recents-screen', true);
+        });
+
+        return { showScreen };
+    })();   
+    // --- RECENTS PANEL MODULE ---
+    function renderRecents() {
+        const container = document.getElementById('recents-container');
+        const appPreviews = { "notes-app": "url('https://images.unsplash.com/photo-1517842642130-1c93a05a2f0f')", "calculator-app": "url('https://images.unsplash.com/photo-1617957718642-702339e1e27c')", "settings-app": "url('https://images.unsplash.com/photo-1599623838278-7509f7a2278b')", "browser-app": "url('https://images.unsplash.com/photo-1611117775531-4328c680852e')" };
+
+        container.innerHTML = (openApps.size === 0) ? '<p style="color:white;text-align:center;width:100%;">No recent apps</p>' : '';
+        
+        [...openApps].reverse().forEach(appId => {
+            const appIcon = document.querySelector(`.app-icon[data-app="${appId}"]`);
+            if (!appIcon) return;
+            const card = document.createElement('div');
+            card.className = 'recents-card';
+            card.innerHTML = `<div class="recents-card-header">${appIcon.querySelector('.icon-3d').innerHTML}<span>${appIcon.dataset.appName}</span></div><div class="recents-card-preview" style="background-image: ${appPreviews[appId] || 'none'}"></div>`;
+            card.addEventListener('click', () => navigation.showScreen(appId, true));
+            container.appendChild(card);
+        });
+    }
+    document.getElementById('clear-recents-btn').addEventListener('click', () => {
+        openApps.clear();
+        document.getElementById('home-btn').click();
+    });
+    
+    // --- SETTINGS APP MODULE ---
+    (() => {
+        const screen = document.querySelector('.screen');
+        const globalDarkToggle = document.getElementById('dark-mode-toggle');
+        const wallpaperOptions = document.querySelectorAll('.wallpaper-option');
+        
+        globalDarkToggle.addEventListener('change', () => {
+            document.body.classList.toggle('global-dark-mode', globalDarkToggle.checked)
+        });
+
+        wallpaperOptions.forEach(opt => opt.addEventListener('click', () => {
+            screen.style.backgroundImage = opt.dataset.wallpaper;
+            wallpaperOptions.forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+        }));
+    })();
+    
+    // --- CALCULATOR APP MODULE ---
+    (() => {
+        const display = document.querySelector('.calc-display');
+        const buttonsContainer = document.querySelector('.calc-buttons');
+        let state = { current: '', previous: '', operator: '', isError: false };
+        const btnValues = ['C', '±', '%', '/', '7', '8', '9', '*', '4', '5', '6', '-', '1', '2', '3', '+', '0', '.', '='];
+        buttonsContainer.innerHTML = btnValues.map(b => `<button class="calc-btn ${b === '0' ? 'zero-btn' : ''}" data-value="${b}">${b}</button>`).join('');
+
+        const resetState = () => { state = { current: '', previous: '', operator: '', isError: false }; };
+        const updateDisplay = () => { display.textContent = (state.current || state.previous || '0').toString().slice(0, 10); };
+        const calculate = () => { let p = parseFloat(state.previous), c = parseFloat(state.current); if (isNaN(p) || isNaN(c)) return NaN; switch(state.operator){ case '+': return p + c; case '-': return p - c; case '*': return p * c; case '/': return c === 0 ? 'Error' : p / c; } return NaN;};
+        
+        buttonsContainer.addEventListener('click', e => {
+            if (!e.target.matches('.calc-btn')) return;
+            const btn = e.target; btn.classList.add('depressed'); setTimeout(() => { btn.classList.remove('depressed'); btn.classList.add('bounce'); setTimeout(() => btn.classList.remove('bounce'), 200); }, 100);
+            
+            const value = btn.dataset.value;
+            if (state.isError && value !== 'C') return;
+            if (!isNaN(value) || value === '.') { if (state.current.length < 9) state.current += (value === '.' && state.current.includes('.')) ? '' : value;
+            } else if (['+', '-', '*', '/'].includes(value)) { if (state.previous) { state.previous = calculate(); } else { state.previous = state.current; }; state.current = ''; state.operator = value;
+            } else if (value === '=') { if (!state.operator || !state.current) return; state.current = calculate(); state.previous = ''; state.operator = ''; if (state.current === 'Error') state.isError = true;
+            } else if (value === 'C') { resetState();
+            } else if (value === '±') { state.current = (parseFloat(state.current || state.previous) * -1).toString();
+            } else if (value === '%') { state.current = (parseFloat(state.current || state.previous) / 100).toString(); }
+            updateDisplay();
+        });
+        document.getElementById('calc-dark-mode-toggle').addEventListener('change', e => document.getElementById('calculator-app').classList.toggle('dark-mode', e.target.checked));
+    })();
+    
+    // --- NOTES APP MODULE (IN-MEMORY) ---
+    const notesApp = (() => {
+        let notes = []; let currentNoteId = null;
+        const els = { list: document.getElementById('notes-list'), editor: document.querySelector('.note-editor'), title: document.getElementById('note-title-input'), content: document.getElementById('note-content-input') };
+
+        const renderNotes = () => {
+            els.list.innerHTML = (notes.length === 0) ? '<p style="text-align:center;color:var(--secondary-text-color);padding:20px;">No notes yet!</p>' : '';
+            notes.sort((a,b) => b.id-a.id).forEach(note => {
+                const item = document.createElement('div'); item.className='note-item'; item.dataset.id=note.id;
+                item.innerHTML=`<h3>${note.title}</h3><span>${new Date(note.id).toLocaleString()}</span>`;
+                item.addEventListener('click',() => openEditor(note.id)); els.list.appendChild(item);
+            });
+        };
+        const saveNote = () => {
+            const title = els.title.value.trim() || 'Untitled Note', content = els.content.value.trim();
+            const existingIndex = notes.findIndex(n => n.id === currentNoteId);
+            if (existingIndex > -1) {
+                if (title === 'Untitled Note' && content === '') { notes.splice(existingIndex, 1); } else { notes[existingIndex] = { ...notes[existingIndex], title, content };}
+            } else if (title !== 'Untitled Note' || content !== '') { notes.push({ id: currentNoteId, title, content }); }
+            renderNotes();
+        };
+        const openEditor = (id) => {
+            const note = notes.find(n => n.id === id);
+            if (note) { currentNoteId = note.id; els.title.value = note.title; els.content.value = note.content;
+            } else { currentNoteId = Date.now(); els.title.value = ''; els.content.value = ''; }
+            els.editor.classList.add('active');
+        };
+        const closeEditor = () => {
+            saveNote();
+            els.editor.classList.remove('active');
+        };
+
+        document.getElementById('add-note-btn').addEventListener('click', () => openEditor(null));
+        document.getElementById('back-to-list-btn').addEventListener('click', closeEditor);
+        document.getElementById('delete-note-btn').addEventListener('click', () => { notes = notes.filter(n => n.id !== currentNoteId); renderNotes(); closeEditor(); });
+
+        renderNotes();
+        return { closeEditor };
+    })();
+});
+      </script>
+    </body>
+</html>
+    
